@@ -22,8 +22,10 @@ use Phalcon\Validation\Validator\Identical;
 abstract class FormBase extends Form
 {
 
-    // CSRF name
-    const CSRF_NAME = 'csrf';
+    /**
+     * CSRF Form Name
+     */
+    public const CSRF_NAME = 'csrf';
 
     /**
      * Constructor
