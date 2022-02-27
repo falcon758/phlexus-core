@@ -24,23 +24,43 @@ class Security extends PhalconSecurity
     public const APP_HASH_PARAM_KEY = 'app_hash';
 
     /**
-     * Sets the events manager.
+     * Gets user token
      *
-     * @param  ManagerInterface $eventsManager
-     * @return void
+     * @param string $userHash User hash
+     *
+     * @return string
      */
-    public function getUserToken(string $hashCode): string {
-        return $this->hash($this->getAppHash() . $hashCode);
+    public function getUserToken(string $userHash): string {
+        return $this->hash($this->getAppHash() . $userHash);
     }
 
-    public function getUserTokenByDate(string $hashCode): string {
-        return $this->hash($this->getAppHash() . $hashCode . date('Y-m-d'));
+    /**
+     * Gets user token By Date
+     *
+     * @param string $userHash User hash
+     *
+     * @return string
+     */
+    public function getUserTokenByDate(string $userHash): string {
+        return $this->hash($this->getAppHash() . $userHash . date('Y-m-d'));
     }
 
-    public function getUserTokenByHour(string $hashCode): string {
-        return $this->hash($this->getAppHash() . $hashCode . date('Y-m-d H'));
+    /**
+     * Gets user token by Hour
+     *
+     * @param string $userHash User hash
+     *
+     * @return string
+     */
+    public function getUserTokenByHour(string $userHash): string {
+        return $this->hash($this->getAppHash() . $userHash . date('Y-m-d H'));
     }
 
+    /**
+     * Gets app hash
+     *
+     * @return string
+     */
     protected function getAppHash(): string {
         $configs = Helpers::phlexusConfig('security')->toArray();
 
