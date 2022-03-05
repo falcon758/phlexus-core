@@ -20,6 +20,8 @@ use Phalcon\Mvc\Model\ResultsetInterface;
 
 abstract class Model extends \Phalcon\Mvc\Model implements ModelInterface
 {
+    private const SECUREKEY = 'd8dc2d6eeb2b3350c0434ece7d9a9c6fcbd51f3da094527d8185c5425380eea7';
+
     protected static array $encryptFields = [];
 
     private static Security $security;
@@ -164,6 +166,6 @@ abstract class Model extends \Phalcon\Mvc\Model implements ModelInterface
      * @return string
      */
     private static function getToken() {
-        return self::getSecurity()->getStaticUserToken('1234');
+        return self::getSecurity()->getStaticUserToken(self::SECUREKEY);
     }
 }
