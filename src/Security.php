@@ -24,6 +24,17 @@ class Security extends PhalconSecurity
     public const APP_HASH_PARAM_KEY = 'app_hash';
 
     /**
+     * Gets static user token
+     *
+     * @param string $userHash User hash
+     *
+     * @return string
+     */
+    public function getStaticUserToken(string $userHash): string {
+        return \md5($this->getAppHash() . $userHash);
+    }
+
+    /**
      * Gets user token
      *
      * @param string $userHash User hash
