@@ -46,6 +46,18 @@ class Security extends PhalconSecurity
     }
 
     /**
+     * Check user token
+     *
+     * @param string $userHash User hash
+     * @param string $token    Token to check
+     *
+     * @return bool
+     */
+    public function checkUserToken(string $userHash, string $token): bool {
+        return $this->checkHash($this->getAppHash() . $userHash, $token);
+    }
+
+    /**
      * Gets user token By Date
      *
      * @param string $userHash User hash
@@ -57,6 +69,18 @@ class Security extends PhalconSecurity
     }
 
     /**
+     * Check user token
+     *
+     * @param string $userHash User hash
+     * @param string $token    Token to check
+     *
+     * @return bool
+     */
+    public function checkUserTokenByDate(string $userHash, string $token): bool {
+        return $this->checkHash($this->getAppHash() . $userHash . date('Y-m-d'), $token);
+    }
+
+    /**
      * Gets user token by Hour
      *
      * @param string $userHash User hash
@@ -65,6 +89,18 @@ class Security extends PhalconSecurity
      */
     public function getUserTokenByHour(string $userHash): string {
         return $this->hash($this->getAppHash() . $userHash . date('Y-m-d H'));
+    }
+
+    /**
+     * Check user token by Hour
+     *
+     * @param string $userHash User hash
+     * @param string $token    Token to check
+     *
+     * @return boll
+     */
+    public function checkUserTokenByHour(string $userHash, string $token): bool {
+        return $this->checkHash($this->getAppHash() . $userHash . date('Y-m-d H'), $token);
     }
 
     /**
