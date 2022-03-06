@@ -26,6 +26,8 @@ abstract class Model extends \Phalcon\Mvc\Model implements ModelInterface
 
     private static Security $security;
 
+    private static string $userToken;
+
     /**
      * Encrypt all specified fields
      *
@@ -127,6 +129,32 @@ abstract class Model extends \Phalcon\Mvc\Model implements ModelInterface
     }
 
     /**
+     * Get user token
+     * 
+     * @return string
+     */
+    public static function getUserToken(): string {
+        $userToken = $this->userToken;
+
+        if (!isset($userToken)) {
+            $userToken = self::SECUREKEY;
+        }
+
+        return $userToken;
+    }
+
+    /**
+     * Set user token
+     * 
+     * @param string $userToken
+     * 
+     * @return void
+     */
+    public static function setUserToken(string $userToken): void {
+        $this->userToken = $userToken;
+    }
+
+    /**
      * After Fetch
      * 
      * @return void
@@ -149,9 +177,9 @@ abstract class Model extends \Phalcon\Mvc\Model implements ModelInterface
     /**
      * Get security
      * 
-     * @return void
+     * @return Security
      */
-    public static function getSecurity()
+    private static function getSecurity(): Security
     {
         if (!isset(self::$security)) {
             self::$security = new Security();
@@ -166,6 +194,6 @@ abstract class Model extends \Phalcon\Mvc\Model implements ModelInterface
      * @return string
      */
     private static function getToken() {
-        return self::getSecurity()->getStaticUserToken(self::SECUREKEY);
+        return self::getSecurity()->getStaticUserToken(self::getUserToken());
     }
 }

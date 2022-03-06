@@ -41,4 +41,20 @@ interface ModelInterface
      * @return PhalconModel
      */
     public static function decrypt(PhalconModel $model): PhalconModel;
+
+    /**
+     * Get user token
+     * 
+     * @return string
+     */
+    public static function getUserToken(): string;
+
+    /**
+     * Set user token
+     * 
+     * @param string $userToken
+     * 
+     * @return void
+     */
+    public static function setUserToken(string $userToken): void;
 }
