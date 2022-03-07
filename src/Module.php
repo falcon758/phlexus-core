@@ -29,7 +29,7 @@ abstract class Module implements ModuleInterface
     /**
      * @var DiInterface
      */
-    protected $di;
+    protected DiInterface $di;
 
     /**
      * @var ManagerInterface|null

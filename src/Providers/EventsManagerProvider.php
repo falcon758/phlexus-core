@@ -23,7 +23,7 @@ class EventsManagerProvider extends AbstractProvider
      *
      * @var string
      */
-    protected $providerName = 'eventsManager';
+    protected string $providerName = 'eventsManager';
 
     /**
      * Register application service.

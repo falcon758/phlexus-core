@@ -25,7 +25,7 @@ class RouterProvider extends AbstractProvider
      *
      * @var string
      */
-    protected $providerName = 'router';
+    protected string $providerName = 'router';
 
     /**
      * Register application service.

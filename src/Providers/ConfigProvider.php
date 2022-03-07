@@ -22,7 +22,7 @@ class ConfigProvider extends AbstractProvider
      *
      * @var string
      */
-    protected $providerName = 'config';
+    protected string $providerName = 'config';
 
     /**
      * Register application provider

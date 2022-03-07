@@ -22,7 +22,7 @@ class ModelsMetadataProvider extends AbstractProvider
      *
      * @var string
      */
-    protected $providerName = 'modelsMetadata';
+    protected string $providerName = 'modelsMetadata';
 
     /**
      * Register application provider

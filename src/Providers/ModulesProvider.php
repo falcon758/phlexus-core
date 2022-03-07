@@ -29,7 +29,7 @@ class ModulesProvider extends AbstractProvider
      *
      * @var string
      */
-    protected $providerName = 'modules';
+    protected string $providerName = 'modules';
 
     /**
      * Register application provider

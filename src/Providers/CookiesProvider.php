@@ -22,7 +22,7 @@ class CookiesProvider extends AbstractProvider
      *
      * @var string
      */
-    protected $providerName = 'cookies';
+    protected string $providerName = 'cookies';
 
     /**
      * Register application service.

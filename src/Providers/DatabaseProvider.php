@@ -22,7 +22,7 @@ class DatabaseProvider extends AbstractProvider
      *
      * @var string
      */
-    protected $providerName = 'db';
+    protected string $providerName = 'db';
 
     /**
      * Register application service.

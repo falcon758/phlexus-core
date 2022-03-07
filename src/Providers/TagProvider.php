@@ -22,7 +22,7 @@ class TagProvider extends AbstractProvider
      *
      * @var string
      */
-    protected $providerName = 'tag';
+    protected string $providerName = 'tag';
 
     /**
      * Register application service.

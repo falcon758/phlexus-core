@@ -11,7 +11,7 @@ trait ApplicationTest
     /**
      * @var Application
      */
-    protected $app;
+    protected Application $app;
 
     /**
      * @return Application

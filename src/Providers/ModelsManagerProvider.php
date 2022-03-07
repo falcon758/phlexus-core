@@ -22,7 +22,7 @@ class ModelsManagerProvider extends AbstractProvider
      *
      * @var string
      */
-    protected $providerName = 'modelsManager';
+    protected string $providerName = 'modelsManager';
 
     /**
      * Register application provider

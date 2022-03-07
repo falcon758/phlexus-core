@@ -24,7 +24,7 @@ abstract class AbstractProvider extends Injectable implements ProviderInterface
      *
      * @var string
      */
-    protected $providerName;
+    protected string $providerName;
 
     /**
      * AbstractProvider constructor.

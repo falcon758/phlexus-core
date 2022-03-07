@@ -22,7 +22,7 @@ class ViewProvider extends AbstractProvider
      *
      * @var string
      */
-    protected $providerName = 'view';
+    protected string $providerName = 'view';
 
     /**
      * Register application service.

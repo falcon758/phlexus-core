@@ -22,7 +22,7 @@ class UrlProvider extends AbstractProvider
      *
      * @var string
      */
-    protected $providerName = 'url';
+    protected string $providerName = 'url';
 
     /**
      * Register application service.

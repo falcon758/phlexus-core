@@ -32,7 +32,7 @@ class SecurityProvider extends AbstractProvider
      *
      * @var string
      */
-    protected $providerName = 'security';
+    protected string $providerName = 'security';
 
     /**
      * Register application provider

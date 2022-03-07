@@ -25,7 +25,7 @@ class DispatcherProvider extends AbstractProvider
      *
      * @var string
      */
-    protected $providerName = 'dispatcher';
+    protected string $providerName = 'dispatcher';
 
     /**
      * Register application provider

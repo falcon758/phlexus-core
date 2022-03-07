@@ -22,7 +22,7 @@ class ResponseProvider extends AbstractProvider
      *
      * @var string
      */
-    protected $providerName = 'response';
+    protected string $providerName = 'response';
 
     /**
      * Register application provider

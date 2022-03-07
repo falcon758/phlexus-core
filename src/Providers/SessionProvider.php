@@ -23,7 +23,7 @@ class SessionProvider extends AbstractProvider
      *
      * @var string
      */
-    protected $providerName = 'session';
+    protected string $providerName = 'session';
 
     /**
      * Register application service.

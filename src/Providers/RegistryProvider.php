@@ -22,7 +22,7 @@ class RegistryProvider extends AbstractProvider
      *
      * @var string
      */
-    protected $providerName = 'registry';
+    protected string $providerName = 'registry';
 
     /**
      * Register application service.

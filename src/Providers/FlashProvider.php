@@ -23,7 +23,7 @@ class FlashProvider extends AbstractProvider
      *
      * @var string
      */
-    protected $providerName = 'flash';
+    protected string $providerName = 'flash';
 
     /**
      * Register application service.

@@ -22,7 +22,7 @@ class EscaperProvider extends AbstractProvider
      *
      * @var string
      */
-    protected $providerName = 'escaper';
+    protected string $providerName = 'escaper';
 
     /**
      * Register application service.

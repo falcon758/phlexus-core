@@ -22,7 +22,7 @@ class RequestProvider extends AbstractProvider
      *
      * @var string
      */
-    protected $providerName = 'request';
+    protected string $providerName = 'request';
 
     /**
      * Register application service.

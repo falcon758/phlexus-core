@@ -22,7 +22,7 @@ class VoltTemplateEngineProvider extends AbstractProvider
      *
      * @var string
      */
-    protected $providerName = 'volt';
+    protected string $providerName = 'volt';
 
     /**
      * Register application service.

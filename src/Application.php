@@ -80,21 +80,21 @@ class Application
      *
      * @var DiInterface
      */
-    protected $di;
+    protected DiInterface $di;
 
     /**
      * The Phalcon Application
      *
      * @var MvcApplication
      */
-    protected $app;
+    protected MvcApplication $app;
 
     /**
      * Root path of project
      *
      * @var string
      */
-    protected $rootPath;
+    protected string $rootPath;
 
     /**
      * Application mode
@@ -103,7 +103,7 @@ class Application
      *
      * @var string
      */
-    protected $mode;
+    protected string $mode;
 
     /**
      * Application Service Providers
