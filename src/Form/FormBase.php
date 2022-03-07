@@ -29,8 +29,10 @@ abstract class FormBase extends Form
 
     /**
      * Constructor
+     *
+     * @param bool $gerenateCsrf Should csrf be generated
      */
-    public function __construct($gerenateCsrf = true)
+    public function __construct(bool $gerenateCsrf = true)
     {
         parent::__construct();
         
@@ -44,7 +46,7 @@ abstract class FormBase extends Form
      * 
      * @return void
      */
-    private function assignCsrf($gerenateCsrf) {
+    private function assignCsrf(bool $gerenateCsrf) {
         $csrf = new Hidden(self::CSRF_NAME);
 
         if ($gerenateCsrf) {
