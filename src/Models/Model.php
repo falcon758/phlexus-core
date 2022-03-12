@@ -20,13 +20,9 @@ use Phalcon\Mvc\Model\ResultsetInterface;
 
 abstract class Model extends \Phalcon\Mvc\Model implements ModelInterface
 {
-    private const SECUREKEY = 'd8dc2d6eeb2b3350c0434ece7d9a9c6fcbd51f3da094527d8185c5425380eea7';
-
     protected static array $encryptFields = [];
 
     private static Security $security;
-
-    private static string $userToken;
 
     /**
      * Encrypt all specified fields
@@ -43,22 +39,14 @@ abstract class Model extends \Phalcon\Mvc\Model implements ModelInterface
             return $model;
         }
 
-        $token = self::getToken();
+        $modelToken = self::getModelToken();
 
-        $query = 'SELECT ';
         foreach ($encryptFields as $field) {
             if (!isset($model->{$field})) { continue; }
 
-            $query .= 'FN_Encrypt("' . base64_encode($model->{$field}) . '", "' . base64_encode($token) .'") AS ' . $field . ',';
+            $model->{$field} = \openssl_encrypt($model->{$field}, 'method', $modelToken);
         }
-       
-        $encryptedFields = new ResultSimple(null, $model, $model->getReadConnection()->query(rtrim(trim($query), ',')));
 
-        if (!$encryptedFields) { return $model; }
-
-        foreach (current($encryptedFields->toArray()) as $field => $value) {
-            $model->{$field} = $value;
-        }
 
         return $model;
     }
@@ -78,21 +66,12 @@ abstract class Model extends \Phalcon\Mvc\Model implements ModelInterface
             return $model;
         }
 
-        $token = self::getToken();
+        $modelToken = self::getModelToken();
 
-        $query = 'SELECT ';
         foreach ($encryptFields as $field) {
             if (!isset($model->{$field})) { continue; }
 
-            $query .= 'FN_Decrypt("' . base64_encode($model->{$field}) . '", "' . base64_encode($token) .'") AS ' . $field . ',';
-        }
-
-        $decryptedFields = new ResultSimple(null, $model, $model->getReadConnection()->query(rtrim(trim($query), ',')));
-
-        if (!$decryptedFields) { return $model; }
-
-        foreach (current($decryptedFields->toArray()) as $field => $value) {
-            $model->{$field} = $value;
+            $model->{$field} = \openssl_decrypt($model->{$field}, 'method', $modelToken);
         }
 
         return $model;
@@ -129,32 +108,6 @@ abstract class Model extends \Phalcon\Mvc\Model implements ModelInterface
     }
 
     /**
-     * Get user token
-     * 
-     * @return string
-     */
-    public static function getUserToken(): string {
-        $userToken = $this->userToken;
-
-        if (!isset($userToken)) {
-            $userToken = self::SECUREKEY;
-        }
-
-        return $userToken;
-    }
-
-    /**
-     * Set user token
-     * 
-     * @param string $userToken
-     * 
-     * @return void
-     */
-    public static function setUserToken(string $userToken): void {
-        $this->userToken = $userToken;
-    }
-
-    /**
      * After Fetch
      * 
      * @return void
@@ -181,6 +134,8 @@ abstract class Model extends \Phalcon\Mvc\Model implements ModelInterface
      */
     private static function getSecurity(): Security
     {
+        var_dump('teste');
+        exit();
         if (!isset(self::$security)) {
             self::$security = new Security();
         }
@@ -189,11 +144,11 @@ abstract class Model extends \Phalcon\Mvc\Model implements ModelInterface
     }
 
     /**
-     * Get Token
+     * Get Model Token
      * 
      * @return string
      */
-    private static function getToken() {
-        return self::getSecurity()->getStaticUserToken(self::getUserToken());
+    private static function getModelToken() {
+        return self::getSecurity()->getStaticDatabaseToken();
     }
 }

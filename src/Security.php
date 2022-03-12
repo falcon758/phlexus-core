@@ -19,98 +19,166 @@ use Phalcon\Security as PhalconSecurity;
 class Security extends PhalconSecurity
 {
     /**
-     * Configuration app hash key name
+     * @var string
      */
-    public const APP_HASH_PARAM_KEY = 'app_hash';
+    private string $appHash;
 
     /**
-     * Gets static user token
-     *
-     * @param string $userHash User hash
+     * @var string
+     */
+    private string $userHash;
+
+    /**
+     * @var string
+     */
+    private string $databaseHash;
+
+    /**
+     * Get app hash
      *
      * @return string
      */
-    public function getStaticUserToken(string $userHash): string {
-        return \md5($this->getAppHash() . $userHash);
+    protected function getAppHash(): string {
+        return $this->appHash;
     }
 
     /**
-     * Gets user token
+     * Set UserHash
      *
      * @param string $userHash User hash
      *
+     * @return void
+     */
+    public function setAppHash(string $appHash): void {
+        $this->appHash = $appHash;
+    }
+
+    /**
+     * Get UserHash
+     *
      * @return string
      */
-    public function getUserToken(string $userHash): string {
-        return $this->hash($this->getAppHash() . $userHash);
+    public function getUserHash(): string {
+        return $this->userHash;
+    }
+
+    /**
+     * Set UserHash
+     *
+     * @param string $userHash User hash
+     *
+     * @return void
+     */
+    public function setUserHash(string $userHash): void {
+        $this->userHash = $userHash;
+    }
+
+    /**
+     * Get DatabaseHash
+     *
+     * @return string
+     */
+    public function getDatabaseHash(): string {
+        return $this->databaseHash;
+    }
+
+    /**
+     * Set DatabaseHash
+     *
+     * @param string $databaseHash User hash
+     *
+     * @return void
+     */
+    public function setDatabaseHash(string $databaseHash): void {
+        $this->databaseHash = $databaseHash;
+    }
+
+    /**
+     * Get static user token
+     *
+     * @param string $append String to append
+     *
+     * @return string
+     */
+    public function getStaticUserToken(string $append = ''): string {
+        return \md5($this->getAppHash() . $this->getUserHash() . $append);
+    }
+
+    /**
+     * Get static database token
+     *
+     * @return string
+     */
+    public function getStaticDatabaseToken(string $append = ''): string {
+        return $this->getStaticUserToken($this->getDatabaseHash());
+    }
+
+    /**
+     * Get user token
+     *
+     * @param string $append String to append
+     *
+     * @return string
+     */
+    public function getUserToken(string $append = ''): string {
+        return $this->hash($this->getAppHash() . $this->getUserHash() . $append);
     }
 
     /**
      * Check user token
      *
-     * @param string $userHash User hash
      * @param string $token    Token to check
+     * @param string $append   String to append
      *
      * @return bool
      */
-    public function checkUserToken(string $userHash, string $token): bool {
-        return $this->checkHash($this->getAppHash() . $userHash, $token);
+    public function checkUserToken(string $token, string $append = ''): bool {
+        return $this->checkHash($this->getAppHash() . $this->getUserHash() . $append, $token);
     }
 
     /**
-     * Gets user token By Date
+     * Get user token By Date
      *
-     * @param string $userHash User hash
+     * @param string $append String to append
      *
      * @return string
      */
-    public function getUserTokenByDate(string $userHash): string {
-        return $this->hash($this->getAppHash() . $userHash . date('Y-m-d'));
+    public function getUserTokenByDate(string $append = ''): string {
+        return $this->hash($this->getAppHash() . $this->getUserHash() . $append . date('Y-m-d'));
     }
 
     /**
      * Check user token
      *
-     * @param string $userHash User hash
      * @param string $token    Token to check
+     * @param string $append   String to append
      *
      * @return bool
      */
-    public function checkUserTokenByDate(string $userHash, string $token): bool {
-        return $this->checkHash($this->getAppHash() . $userHash . date('Y-m-d'), $token);
+    public function checkUserTokenByDate(string $token, string $append = ''): bool {
+        return $this->checkHash($this->getAppHash() . $this->getUserHash() . $append . date('Y-m-d'), $token);
     }
 
     /**
-     * Gets user token by Hour
+     * Get user token by Hour
      *
-     * @param string $userHash User hash
+     * @param string $append String to append
      *
      * @return string
      */
-    public function getUserTokenByHour(string $userHash): string {
-        return $this->hash($this->getAppHash() . $userHash . date('Y-m-d H'));
+    public function getUserTokenByHour(string $append = ''): string {
+        return $this->hash($this->getAppHash() . $this->getUserHash() . $append . date('Y-m-d H'));
     }
 
     /**
      * Check user token by Hour
      *
-     * @param string $userHash User hash
      * @param string $token    Token to check
+     * @param string $append   String to append
      *
-     * @return boll
+     * @return bool
      */
-    public function checkUserTokenByHour(string $userHash, string $token): bool {
-        return $this->checkHash($this->getAppHash() . $userHash . date('Y-m-d H'), $token);
-    }
-
-    /**
-     * Gets app hash
-     *
-     * @return string
-     */
-    protected function getAppHash(): string {
-        $configs = Helpers::phlexusConfig('security')->toArray();
-
-        return isset($configs[self::APP_HASH_PARAM_KEY]) ? $configs[self::APP_HASH_PARAM_KEY] : '';
+    public function checkUserTokenByHour(string $token, string $append = ''): bool {
+        return $this->checkHash($this->getAppHash() . $this->getUserHash() . $append . date('Y-m-d H'), $token);
     }
 }
