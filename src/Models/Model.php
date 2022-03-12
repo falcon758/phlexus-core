@@ -44,7 +44,7 @@ abstract class Model extends \Phalcon\Mvc\Model implements ModelInterface
         foreach ($encryptFields as $field) {
             if (!isset($model->{$field})) { continue; }
 
-            $model->{$field} = \openssl_encrypt($model->{$field}, 'method', $modelToken);
+            $model->{$field} = \openssl_encrypt($model->{$field}, 'aes-256-cbc-hmac-sha256', $modelToken);
         }
 
 
@@ -71,7 +71,7 @@ abstract class Model extends \Phalcon\Mvc\Model implements ModelInterface
         foreach ($encryptFields as $field) {
             if (!isset($model->{$field})) { continue; }
 
-            $model->{$field} = \openssl_decrypt($model->{$field}, 'method', $modelToken);
+            $model->{$field} = \openssl_decrypt($model->{$field}, 'aes-256-cbc-hmac-sha256', $modelToken);
         }
 
         return $model;
@@ -134,8 +134,6 @@ abstract class Model extends \Phalcon\Mvc\Model implements ModelInterface
      */
     private static function getSecurity(): Security
     {
-        var_dump('teste');
-        exit();
         if (!isset(self::$security)) {
             self::$security = new Security();
         }
