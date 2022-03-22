@@ -38,7 +38,8 @@ class Security extends PhalconSecurity
      *
      * @return string
      */
-    protected function getAppHash(): string {
+    protected function getAppHash(): string
+    {
         return $this->appHash;
     }
 
@@ -49,7 +50,8 @@ class Security extends PhalconSecurity
      *
      * @return void
      */
-    public function setAppHash(string $appHash): void {
+    public function setAppHash(string $appHash): void
+    {
         $this->appHash = $appHash;
     }
 
@@ -58,7 +60,8 @@ class Security extends PhalconSecurity
      *
      * @return string
      */
-    public function getUserHash(): string {
+    public function getUserHash(): string
+    {
         return $this->userHash;
     }
 
@@ -69,7 +72,8 @@ class Security extends PhalconSecurity
      *
      * @return void
      */
-    public function setUserHash(string $userHash): void {
+    public function setUserHash(string $userHash): void
+    {
         $this->userHash = $userHash;
     }
 
@@ -78,7 +82,8 @@ class Security extends PhalconSecurity
      *
      * @return string
      */
-    public function getDatabaseHash(): string {
+    public function getDatabaseHash(): string
+    {
         return $this->databaseHash;
     }
 
@@ -89,7 +94,8 @@ class Security extends PhalconSecurity
      *
      * @return void
      */
-    public function setDatabaseHash(string $databaseHash): void {
+    public function setDatabaseHash(string $databaseHash): void
+    {
         $this->databaseHash = $databaseHash;
     }
 
@@ -100,7 +106,8 @@ class Security extends PhalconSecurity
      *
      * @return string
      */
-    public function getStaticUserToken(string $append = ''): string {
+    public function getStaticUserToken(string $append = ''): string
+    {
         return \md5($this->getAppHash() . $this->getUserHash() . $append);
     }
 
@@ -109,7 +116,8 @@ class Security extends PhalconSecurity
      *
      * @return string
      */
-    public function getStaticDatabaseToken(string $append = ''): string {
+    public function getStaticDatabaseToken(string $append = ''): string
+    {
         return $this->getStaticUserToken($this->getDatabaseHash());
     }
 
@@ -120,7 +128,8 @@ class Security extends PhalconSecurity
      *
      * @return string
      */
-    public function getUserToken(string $append = ''): string {
+    public function getUserToken(string $append = ''): string
+    {
         return $this->hash($this->getAppHash() . $this->getUserHash() . $append);
     }
 
@@ -132,7 +141,8 @@ class Security extends PhalconSecurity
      *
      * @return bool
      */
-    public function checkUserToken(string $token, string $append = ''): bool {
+    public function checkUserToken(string $token, string $append = ''): bool
+    {
         return $this->checkHash($this->getAppHash() . $this->getUserHash() . $append, $token);
     }
 
@@ -143,7 +153,8 @@ class Security extends PhalconSecurity
      *
      * @return string
      */
-    public function getUserTokenByDate(string $append = ''): string {
+    public function getUserTokenByDate(string $append = ''): string
+    {
         return $this->hash($this->getAppHash() . $this->getUserHash() . $append . date('Y-m-d'));
     }
 
@@ -155,7 +166,8 @@ class Security extends PhalconSecurity
      *
      * @return bool
      */
-    public function checkUserTokenByDate(string $token, string $append = ''): bool {
+    public function checkUserTokenByDate(string $token, string $append = ''): bool
+    {
         return $this->checkHash($this->getAppHash() . $this->getUserHash() . $append . date('Y-m-d'), $token);
     }
 
@@ -166,7 +178,8 @@ class Security extends PhalconSecurity
      *
      * @return string
      */
-    public function getUserTokenByHour(string $append = ''): string {
+    public function getUserTokenByHour(string $append = ''): string
+    {
         return $this->hash($this->getAppHash() . $this->getUserHash() . $append . date('Y-m-d H'));
     }
 
@@ -178,7 +191,8 @@ class Security extends PhalconSecurity
      *
      * @return bool
      */
-    public function checkUserTokenByHour(string $token, string $append = ''): bool {
+    public function checkUserTokenByHour(string $token, string $append = ''): bool
+    {
         return $this->checkHash($this->getAppHash() . $this->getUserHash() . $append . date('Y-m-d H'), $token);
     }
 }

@@ -146,7 +146,8 @@ abstract class Model extends \Phalcon\Mvc\Model implements ModelInterface
      * 
      * @return string
      */
-    private static function getModelToken() {
+    private static function getModelToken()
+    {
         return self::getSecurity()->getStaticDatabaseToken();
     }
 }
