@@ -16,6 +16,7 @@ namespace Phlexus\Providers;
 use Phalcon\Config;
 use Phalcon\Mvc\Router;
 use Phalcon\Mvc\Router\GroupInterface;
+use Phlexus\Application;
 use Phlexus\Helpers;
 
 class RouterProvider extends AbstractProvider
@@ -34,6 +35,13 @@ class RouterProvider extends AbstractProvider
      */
     public function register(array $parameters = []): void
     {
+        $app = Helpers::phlexusContainer(Application::APP_CONTAINER_NAME);
+
+        // Not necessary for command line
+        if ($app->getMode() === Application::MODE_CLI) {
+            return;
+        } 
+
         $this->getDI()->setShared($this->providerName, function () {
             $router = new Router(false);
             $router->removeExtraSlashes(true);

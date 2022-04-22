@@ -17,6 +17,7 @@ use InvalidArgumentException;
 use Phalcon\Cli\Console as CliApplication;
 use Phalcon\Di;
 use Phalcon\Di\DiInterface;
+use Phalcon\Di\FactoryDefault\Cli as CliDI;
 use Phalcon\Mvc\Application as MvcApplication;
 use Phlexus\Providers\ConfigProvider;
 use Phlexus\Providers\CookiesProvider;
@@ -85,9 +86,9 @@ class Application
     /**
      * The Phalcon Application
      *
-     * @var MvcApplication
+     * @var MvcApplication|CliApplication
      */
-    protected MvcApplication $app;
+    protected $app;
 
     /**
      * Root path of project
@@ -126,7 +127,12 @@ class Application
         array $configs = [],
         array $vendorModules = []
     ) {
-        $this->di = new Di();
+        if ($mode == self::MODE_CLI) {
+            $this->di = new CliDI();
+        } else {
+            $this->di = new Di();
+        }
+
         $this->app = $this->createApplication($mode);
         $this->setRootPath($rootPath);
         $this->di->setShared(self::APP_CONTAINER_NAME, $this);
@@ -214,6 +220,29 @@ class Application
     public function run(): string
     {
         return $this->getOutput();
+    }
+
+    /**
+     * Run CLI!
+     * 
+     * @param array $argv
+     * 
+     * @return void
+     */
+    public function runCLI(array $argv): void
+    {
+        $params = [];
+        foreach ($argv as $k => $arg) {
+            if ($k === 1) {
+                $params['task'] = $arg;
+            } elseif ($k === 2) {
+                $params['action'] = $arg;
+            } elseif ($k >= 3) {
+                $params['params'][] = $arg;
+            }
+        }
+
+        $this->app->handle($params);
     }
 
     /**
