@@ -18,11 +18,21 @@ use Phalcon\Mvc\Model as PhalconModel;
 use Phalcon\Mvc\Model\Resultset\Simple as ResultSimple;
 use Phalcon\Mvc\Model\ResultsetInterface;
 
-abstract class Model extends \Phalcon\Mvc\Model implements ModelInterface
+abstract class Model extends PhalconModel implements ModelInterface
 {
     protected static array $encryptFields = [];
 
     private static Security $security;
+
+    /**
+     * Get encrypt fields
+     * 
+     * @return array Fields
+     */
+    public static function getEncryptFields() : array
+    {
+        return [];
+    }
 
     /**
      * Encrypt all specified fields
@@ -87,6 +97,12 @@ abstract class Model extends \Phalcon\Mvc\Model implements ModelInterface
     public static function find($parameters = null): ResultsetInterface
     {
         $result = parent::find($parameters);
+
+        $encryptFields = static::getEncryptFields();
+
+        if (count($encryptFields) === 0) {
+            return $result;
+        }
 
         $resultSet = new Simple(null, null, null);
 
