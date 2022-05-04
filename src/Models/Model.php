@@ -194,18 +194,24 @@ abstract class Model extends PhalconModel implements ModelInterface
         $m_class = static::class;
 
         if (property_exists($m_class, 'active')) {
-            if (isset($parameters[0]) && strpos($parameters[0], 'active') !== null) {
+            $inserted = false;
+            if (isset($parameters[0]) && strpos($parameters[0], 'active') === false) {
                 $parameters[0] .= " AND $m_class.active = :injectedActive:";
-            } else if (!isset($parameters['conditions']) || strpos($parameters['conditions'], 'active') !== null) {
-                $conditions = isset($parameters['conditions']) ? $parameters['conditions'] . ' AND ' : '';
 
+                $inserted = true;
+            } else if (!isset($parameters['conditions']) || strpos($parameters['conditions'], 'active') === false) {
+                $conditions = isset($parameters['conditions']) ? $parameters['conditions'] . ' AND ' : '';
                 $parameters['conditions'] = $conditions . "$m_class.active = :injectedActive:";
+
+                $inserted = true;
             }
 
-            $bind = isset($parameters['bind']) ? $parameters['bind'] : [];
-            $bind['injectedActive'] = defined('ENABLED') ? static::ENABLED : 1;
+            if ($inserted) {
+                $bind = isset($parameters['bind']) ? $parameters['bind'] : [];
+                $bind['injectedActive'] = defined('ENABLED') ? static::ENABLED : 1;
 
-            $parameters['bind'] = $bind;
+                $parameters['bind'] = $bind;
+            }
         }
 
         return $parameters;
