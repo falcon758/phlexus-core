@@ -187,18 +187,13 @@ abstract class Model extends PhalconModel implements ModelInterface
      * @return array
      */
     private static function injectActiveParameter($parameters = null): array {
-        // @Todo: analyze errors
-        if (static::class) {
-            return $parameters ?? [];
-        }
-
         if ($parameters === null) {
             $parameters = [];
         }
 
         $m_class = static::class;
 
-        if (property_exists($m_classs, 'active')) {
+        if (property_exists($m_class, 'active')) {
             if (isset($parameters[0]) && strpos($parameters[0], 'active') !== null) {
                 $parameters[0] .= " AND $m_class.active = :injectedActive:";
             } else if (!isset($parameters['conditions']) || strpos($parameters['conditions'], 'active') !== null) {
