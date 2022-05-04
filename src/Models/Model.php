@@ -92,11 +92,11 @@ abstract class Model extends PhalconModel implements ModelInterface
      * 
      * @param mixed $parameters Parameters to search
      * 
-     * @return void
+     * @return ResultsetInterface
      */
     public static function find($parameters = null): ResultsetInterface
     {
-        $result = parent::find($parameters);
+        $result = parent::find(self::injectActiveParameter($parameters));
 
         $encryptFields = static::getEncryptFields();
 
@@ -121,6 +121,18 @@ abstract class Model extends PhalconModel implements ModelInterface
         $resultSet->rewind();
 
         return $resultSet;
+    }
+
+    /**
+     * Find first records override
+     * 
+     * @param mixed $parameters Parameters to search
+     * 
+     * @return mixed
+     */
+    public static function findFirst($parameters = null)
+    {
+        return parent::findFirst(self::injectActiveParameter($parameters));
     }
 
     /**
@@ -165,5 +177,42 @@ abstract class Model extends PhalconModel implements ModelInterface
     private static function getModelToken()
     {
         return self::getSecurity()->getStaticDatabaseToken();
+    }
+
+    /**
+     * Inject active parameter
+     * 
+     * @param mixed $parameters Parameters to search
+     * 
+     * @return array
+     */
+    private static function injectActiveParameter($parameters = null): array {
+        // @Todo: analyze errors
+        if (static::class) {
+            return $parameters ?? [];
+        }
+
+        if ($parameters === null) {
+            $parameters = [];
+        }
+
+        $m_class = static::class;
+
+        if (property_exists($m_classs, 'active')) {
+            if (isset($parameters[0]) && strpos($parameters[0], 'active') !== null) {
+                $parameters[0] .= " AND $m_class.active = :injectedActive:";
+            } else if (!isset($parameters['conditions']) || strpos($parameters['conditions'], 'active') !== null) {
+                $conditions = isset($parameters['conditions']) ? $parameters['conditions'] . ' AND ' : '';
+
+                $parameters['conditions'] = $conditions . "$m_class.active = :injectedActive:";
+            }
+
+            $bind = isset($parameters['bind']) ? $parameters['bind'] : [];
+            $bind['injectedActive'] = defined('ENABLED') ? static::ENABLED : 1;
+
+            $parameters['bind'] = $bind;
+        }
+
+        return $parameters;
     }
 }
