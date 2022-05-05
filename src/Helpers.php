@@ -54,25 +54,6 @@ class Helpers
     }
 
     /**
-     * @param string $model
-     * @return mixed
-     */
-    public static function phlexusModel(string $model)
-    {
-        if (class_exists($model)) {
-            /**
-             * @psalm-suppress UndefinedClass
-             */
-            return new $model();
-        }
-
-        var_dump($model);
-        exit();
-
-        return null;
-    }
-
-    /**
      * @param string $config
      * @return string|null
      */
