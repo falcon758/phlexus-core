@@ -203,8 +203,10 @@ abstract class Model extends PhalconModel implements ModelInterface
                 $parameters[0] .= " AND $m_class.$activeField = :injectedActive:";
 
                 $inserted = true;
-            } else if (!isset($parameters[0]) 
-                && (!isset($parameters['conditions']) || strpos($parameters['conditions'], $activeField) === false)) {
+            } else if (
+                !isset($parameters[0]) &&
+                (!isset($parameters['conditions']) || strpos($parameters['conditions'], $activeField) === false)
+            ) {
                 $conditions = isset($parameters['conditions']) ? $parameters['conditions'] . ' AND ' : '';
                 $parameters['conditions'] = $conditions . "$m_class.$activeField = :injectedActive:";
 
