@@ -20,6 +20,8 @@ use Phalcon\Mvc\Model\ResultsetInterface;
 
 abstract class Model extends PhalconModel implements ModelInterface
 {
+    public const ACTIVE_FIELD = 'active';
+    
     protected static array $encryptFields = [];
 
     private static Security $security;
@@ -191,17 +193,20 @@ abstract class Model extends PhalconModel implements ModelInterface
             $parameters = [];
         }
 
+        $activeField = self::ACTIVE_FIELD;
+
         $m_class = static::class;
 
-        if (property_exists($m_class, 'active')) {
+        if (property_exists($m_class, $activeField)) {
             $inserted = false;
-            if (isset($parameters[0]) && strpos($parameters[0], 'active') === false) {
-                $parameters[0] .= " AND $m_class.active = :injectedActive:";
+            if (isset($parameters[0]) && strpos($parameters[0], $activeField) === false) {
+                $parameters[0] .= " AND $m_class.$activeField = :injectedActive:";
 
                 $inserted = true;
-            } else if (!isset($parameters['conditions']) || strpos($parameters['conditions'], 'active') === false) {
+            } else if (!isset($parameters[0]) 
+                && (!isset($parameters['conditions']) || strpos($parameters['conditions'], $activeField) === false)) {
                 $conditions = isset($parameters['conditions']) ? $parameters['conditions'] . ' AND ' : '';
-                $parameters['conditions'] = $conditions . "$m_class.active = :injectedActive:";
+                $parameters['conditions'] = $conditions . "$m_class.$activeField = :injectedActive:";
 
                 $inserted = true;
             }

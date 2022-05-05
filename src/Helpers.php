@@ -66,6 +66,9 @@ class Helpers
             return new $model();
         }
 
+        var_dump($model);
+        exit();
+
         return null;
     }
 
@@ -73,16 +76,16 @@ class Helpers
      * @param string $config
      * @return string|null
      */
-    public static function phlexusThemesPath(string $config = 'theme.themes_dir')
+    public static function phlexusThemesPath(string $config = 'theme.themes_dir'): ?string
     {
         return self::phlexusConfig($config);
     }
 
     /**
      * @param string $config
-     * @return string|null
+     * @return string
      */
-    public static function phlexusAssetsPath()
+    public static function phlexusAssetsPath(): string
     {
         $theme = self::phlexusConfig('theme');
         return $theme->theme_public . $theme->theme_user . '/';
