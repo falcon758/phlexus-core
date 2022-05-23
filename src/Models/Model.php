@@ -17,10 +17,14 @@ use Phlexus\Security;
 use Phalcon\Mvc\Model as PhalconModel;
 use Phalcon\Mvc\Model\Resultset\Simple as ResultSimple;
 use Phalcon\Mvc\Model\ResultsetInterface;
+use Phalcon\Paginator\Adapter\Model as PaginatorModel;
+use Phalcon\DI;
 
 abstract class Model extends PhalconModel implements ModelInterface
 {
     public const ACTIVE_FIELD = 'active';
+    
+    private const PAGE_LIMIT = 25;
     
     protected static array $encryptFields = [];
 
@@ -155,6 +159,52 @@ abstract class Model extends PhalconModel implements ModelInterface
     public function beforeSave()
     {
         self::encrypt($this);
+    }
+
+    /**
+     * Get Model Paginator
+     * 
+     * @param array $parameters Parameters to query
+     * @param int   $pageLimit  Page limit to apply
+     * 
+     * @return string
+     */
+    public static function getModelPaginator(array $parameters = [], int $pageLimit = self::PAGE_LIMIT)
+    {
+        $page = (int) Di::getDefault()->get('request')->get('p', null, 1);
+
+        $paginator = new PaginatorModel(
+            [
+                'model'      => static::class,
+                'parameters' => self::arrayToParameters($parameters),
+                'limit'      => $pageLimit,
+                'page'       => $page,
+            ]
+        );
+
+        return $paginator;
+    }
+
+    /**
+     * Convert array to model parameters
+     * 
+     * @param array $parameters Parameters to convert
+     * 
+     * @return array|null
+     */
+    public static function arrayToParameters(array $parameters): ?array {
+        if (count($parameters) === 0) {
+            return null;
+        }
+
+        $assign = array_map(function($k){
+            return "$k = :$k:";
+        }, array_keys($parameters));
+
+        return [
+            0      => implode(' AND ', $assign),
+            'bind' => $parameters
+        ];
     }
 
     /**
