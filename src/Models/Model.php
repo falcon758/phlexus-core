@@ -18,7 +18,7 @@ use Phalcon\Mvc\Model as PhalconModel;
 use Phalcon\Mvc\Model\Resultset\Simple as ResultSimple;
 use Phalcon\Mvc\Model\ResultsetInterface;
 use Phalcon\Paginator\Adapter\Model as PaginatorModel;
-use Phalcon\DI;
+use Phalcon\Di;
 
 abstract class Model extends PhalconModel implements ModelInterface
 {
