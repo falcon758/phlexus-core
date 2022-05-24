@@ -173,6 +173,14 @@ abstract class Model extends PhalconModel implements ModelInterface
     {
         $page = (int) Di::getDefault()->get('request')->get('p', null, 1);
 
+        $activeField = self::ACTIVE_FIELD;
+
+        $m_class = static::class;
+
+        if (!isset($parameters[$activeField]) && property_exists($m_class, $activeField)) {
+            $parameters[$activeField] = defined('ENABLED') ? static::ENABLED : 1;
+        }
+
         $paginator = new PaginatorModel(
             [
                 'model'      => static::class,
@@ -193,12 +201,8 @@ abstract class Model extends PhalconModel implements ModelInterface
      * @return array|null
      */
     public static function arrayToParameters(array $parameters): ?array {
-        $activeField = self::ACTIVE_FIELD;
-
-        $m_class = static::class;
-
-        if (!isset($parameters[$activeField]) && property_exists($m_class, $activeField)) {
-            $parameters[$activeField] = defined('ENABLED') ? static::ENABLED : 1;
+        if (count($parameters) === 0) {
+            return null;
         }
 
         $assign = array_map(function($k){
