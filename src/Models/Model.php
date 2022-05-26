@@ -18,13 +18,12 @@ use Phalcon\Mvc\Model as PhalconModel;
 use Phalcon\Mvc\Model\Resultset\Simple as ResultSimple;
 use Phalcon\Mvc\Model\ResultsetInterface;
 use Phalcon\Paginator\Adapter\Model as PaginatorModel;
-use Phalcon\Di;
 
 abstract class Model extends PhalconModel implements ModelInterface
 {
-    public const ACTIVE_FIELD = 'active';
+    protected const ACTIVE_FIELD = 'active';
     
-    private const PAGE_LIMIT = 25;
+    protected const PAGE_LIMIT = 25;
     
     protected static array $encryptFields = [];
 
@@ -165,14 +164,13 @@ abstract class Model extends PhalconModel implements ModelInterface
      * Get Model Paginator
      * 
      * @param array $parameters Parameters to query
+     * @param array $page       Current page
      * @param int   $pageLimit  Page limit to apply
      * 
      * @return string
      */
-    public static function getModelPaginator(array $parameters = [], int $pageLimit = self::PAGE_LIMIT)
+    public static function getModelPaginator(array $parameters = [], int $page = 1, int $pageLimit = self::PAGE_LIMIT)
     {
-        $page = (int) Di::getDefault()->get('request')->get('p', null, 1);
-
         $activeField = self::ACTIVE_FIELD;
 
         $m_class = static::class;
