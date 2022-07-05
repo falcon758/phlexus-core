@@ -68,6 +68,8 @@ class RouterProvider extends AbstractProvider
 
             $router->setDI(Helpers::phlexusContainer());
 
+            $router->setDefaultModule('Landing');
+
             return $router;
         });
     }
