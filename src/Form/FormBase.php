@@ -13,8 +13,8 @@ namespace Phlexus\Form;
 
 use Phalcon\Forms\Form;
 use Phalcon\Forms\Element\Hidden;
-use Phalcon\Security;
-use Phalcon\Validation\Validator\Identical;
+use Phalcon\Encryption\Security;
+use Phalcon\Filter\Validation\Validator\Identical;
 
 /**
  * @property Security $security

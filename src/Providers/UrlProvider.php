@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Phlexus\Providers;
 
-use Phalcon\Url;
+use Phalcon\Mvc\Url;
 
 class UrlProvider extends AbstractProvider
 {

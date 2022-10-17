@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Phlexus\Providers;
 
-use Phalcon\Config;
+use Phalcon\Config\Config;
 use Phalcon\Mvc\Router;
 use Phalcon\Mvc\Router\GroupInterface;
 use Phlexus\Application;

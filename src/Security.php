@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Phlexus;
 
 use Phlexus\Helpers;
-use Phalcon\Security as PhalconSecurity;
+use Phalcon\Encryption\Security as PhalconSecurity;
 
 class Security extends PhalconSecurity
 {

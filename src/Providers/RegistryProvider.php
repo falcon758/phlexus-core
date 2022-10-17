@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Phlexus\Providers;
 
-use Phalcon\Registry;
+use Phalcon\Support\Registry;
 
 class RegistryProvider extends AbstractProvider
 {

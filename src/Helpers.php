@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Phlexus;
 
+use Phalcon\Di\DI;
+
 class Helpers
 {
     /**
@@ -23,7 +25,7 @@ class Helpers
      */
     public static function phlexusContainer()
     {
-        $default = \Phalcon\Di::getDefault();
+        $default = DI::getDefault();
         $args = func_get_args();
         if (empty($args)) {
             return $default;
@@ -44,7 +46,7 @@ class Helpers
     public static function phlexusConfig()
     {
         $args = func_get_args();
-        $config = \Phalcon\Di::getDefault()->getShared('config');
+        $config = Di::getDefault()->getShared('config');
 
         if (empty($args)) {
             return $config;

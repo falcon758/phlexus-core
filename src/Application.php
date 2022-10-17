@@ -15,7 +15,7 @@ namespace Phlexus;
 
 use InvalidArgumentException;
 use Phalcon\Cli\Console as CliApplication;
-use Phalcon\Di;
+use Phalcon\Di\Di;
 use Phalcon\Di\DiInterface;
 use Phalcon\Di\FactoryDefault\Cli as CliDI;
 use Phalcon\Mvc\Application as MvcApplication;

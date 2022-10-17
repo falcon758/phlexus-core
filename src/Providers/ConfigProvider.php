@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Phlexus\Providers;
 
-use Phalcon\Config;
+use Phalcon\Config\Config;
 
 class ConfigProvider extends AbstractProvider
 {
