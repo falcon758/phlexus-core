@@ -33,12 +33,16 @@ class VoltTemplateEngineProvider extends AbstractProvider
     {
         $di = $this->getDI();
         $view = $di->getShared('view');
+        
         $di->setShared($this->providerName, function () use ($view, $di, $parameters) {
             $volt = new Volt($view, $di);
 
             if (!empty($parameters['volt'])) {
                 $volt->setOptions($parameters['volt']);
             }
+
+            $compiler = $volt->getCompiler();
+            $compiler->addFunction('assetsPath', '\Phlexus\Helpers::phlexusAssetsPath');
 
             return $volt;
         });
