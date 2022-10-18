@@ -31,11 +31,34 @@ class ViewProvider extends AbstractProvider
      */
     public function register(array $parameters = []): void
     {
-        $this->getDI()->setShared($this->providerName, function () use ($parameters) {
-            $view = new View();
+        $di = $this->getDI();
 
+        $di->setShared($this->providerName, function () use ($di, $parameters) {
+            $view = new View();
+            
             if (!empty($parameters['engines'])) {
-                $view->registerEngines($parameters['engines']);
+                foreach ($parameters['engines'] as $extension => $config) {
+                    if (!is_array($config) || !isset($config['class'])) {
+                        continue;
+                    }
+
+                    $view->registerEngines(
+                        [
+                            $extension => function ($view) use ($di, $config) {
+                                $engine = new $config['class']($view, $di);
+                               
+                                if (isset($config['options'])) {
+                                    $engine->setOptions($config['options']);
+                                }
+
+                                $compiler = $engine->getCompiler();
+                                $compiler->addFunction('assetsPath', '\Phlexus\Helpers::phlexusAssetsPath');
+                
+                                return $engine;
+                            }
+                        ]
+                    );
+                }    
             }
 
             return $view;

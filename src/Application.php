@@ -163,7 +163,6 @@ class Application
         $this->initializeProvider(new DispatcherProvider($this->di));
         $this->initializeProvider(new ResponseProvider($this->di));
         $this->initializeProvider(new EscaperProvider($this->di));
-        $this->initializeProvider(new TagProvider($this->di));
         $this->initializeProvider(new CookiesProvider($this->di));
         $this->initializeProvider(new SessionProvider($this->di));
         $this->initializeProvider(new SecurityProvider($this->di), $securityParams);
@@ -177,7 +176,6 @@ class Application
         if ($mode == self::MODE_DEFAULT) {
             $this->initializeProvider(new UrlProvider($this->di), $applicationParams);
             $this->initializeProvider(new ViewProvider($this->di), $viewParams);
-            $this->initializeProvider(new VoltTemplateEngineProvider($this->di), $viewParams);
         }
 
         $this->initializeProviders($extraProviders);
