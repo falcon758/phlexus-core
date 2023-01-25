@@ -40,7 +40,8 @@ class Helpers
      * Also can access nested values.
      * Example: phlexus_config('config.db.name')
      *
-     * @param mixed
+     * @param string
+     * 
      * @return mixed
      */
     public static function phlexusConfig()
