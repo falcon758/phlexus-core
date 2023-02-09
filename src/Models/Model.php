@@ -59,7 +59,7 @@ abstract class Model extends PhalconModel implements ModelInterface
         foreach ($encryptFields as $field) {
             if (!isset($model->{$field})) { continue; }
 
-            $model->{$field} = \openssl_encrypt($model->{$field}, 'aes-256-cbc-hmac-sha256', $modelToken);
+            $model->{$field} = $this->getSecurity()->encrypt($modelToken, $model->{$field});
         }
 
 
@@ -86,7 +86,7 @@ abstract class Model extends PhalconModel implements ModelInterface
         foreach ($encryptFields as $field) {
             if (!isset($model->{$field})) { continue; }
 
-            $model->{$field} = \openssl_decrypt($model->{$field}, 'aes-256-cbc-hmac-sha256', $modelToken);
+            $model->{$field} = $this->getSecurity()->decrypt($modelToken, $model->{$field});
         }
 
         return $model;

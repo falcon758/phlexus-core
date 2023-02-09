@@ -18,6 +18,8 @@ use Phalcon\Encryption\Security as PhalconSecurity;
 
 class Security extends PhalconSecurity
 {
+    private const ENCRYPT_ALGO = 'AES-256-CBC';
+
     /**
      * @var string
      */
@@ -112,6 +114,30 @@ class Security extends PhalconSecurity
     }
 
     /**
+     * Get static user token By Date
+     *
+     * @param string $append String to append
+     *
+     * @return string
+     */
+    public function getStaticUserTokenByDate(string $append = ''): string
+    {
+        return $this->getStaticUserToken(date('Y-m-d'));
+    }
+
+    /**
+     * Get static user token by Hour
+     *
+     * @param string $append String to append
+     *
+     * @return string
+     */
+    public function getStaticUserTokenByHour(string $append = ''): string
+    {
+        return $this->getStaticUserToken(date('Y-m-d H'));
+    }
+
+    /**
      * Get static database token
      *
      * @return string
@@ -194,5 +220,31 @@ class Security extends PhalconSecurity
     public function checkUserTokenByHour(string $token, string $append = ''): bool
     {
         return $this->checkHash($this->getAppHash() . $this->getUserHash() . $append . date('Y-m-d H'), $token);
+    }
+
+    /**
+     * Encrypt data
+     *
+     * @param string $token Token to encrypt
+     * @param string $data  Data to encrypt
+     *
+     * @return string|null
+     */
+    public function encrypt(string $token, string $data): ?string
+    {
+        return \openssl_encrypt($data, Security::ENCRYPT_ALGO, $token, 0, $this->getAppHash()) ?: null;
+    }
+
+    /**
+     * Decrypt data
+     *
+     * @param string $token Token to decrypt
+     * @param string $data  Data to decrypt
+     *
+     * @return string|null
+     */
+    public function decrypt(string $token, string $data): ?string
+    {
+        return \openssl_decrypt($data, Security::ENCRYPT_ALGO, $token, 0, $this->getAppHash()) ?: null;
     }
 }
