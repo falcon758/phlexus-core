@@ -53,6 +53,7 @@ class ViewProvider extends AbstractProvider
 
                                 $compiler = $engine->getCompiler();
                                 $compiler->addFunction('assetsPath', '\Phlexus\Helpers::phlexusAssetsPath');
+                                $compiler->addFunction('round', 'round');
                 
                                 return $engine;
                             }
