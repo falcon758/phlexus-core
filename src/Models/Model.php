@@ -20,7 +20,7 @@ use Phalcon\Mvc\Model\ResultsetInterface;
 use Phalcon\Paginator\Adapter\Model as PaginatorModel;
 use Phalcon\Di\Di;
 
-abstract class Model extends PhalconModel
+abstract class Model extends PhalconModel implements ModelInterface
 {
     protected const ACTIVE_FIELD = 'active';
     
