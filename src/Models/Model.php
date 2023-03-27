@@ -18,16 +18,15 @@ use Phalcon\Mvc\Model as PhalconModel;
 use Phalcon\Mvc\Model\Resultset\Simple as ResultSimple;
 use Phalcon\Mvc\Model\ResultsetInterface;
 use Phalcon\Paginator\Adapter\Model as PaginatorModel;
+use Phalcon\Di\Di;
 
-abstract class Model extends PhalconModel implements ModelInterface
+abstract class Model extends PhalconModel
 {
     protected const ACTIVE_FIELD = 'active';
     
     protected const PAGE_LIMIT = 25;
     
     protected static array $encryptFields = [];
-
-    private static Security $security;
 
     /**
      * Get encrypt fields
@@ -37,59 +36,6 @@ abstract class Model extends PhalconModel implements ModelInterface
     public static function getEncryptFields() : array
     {
         return [];
-    }
-
-    /**
-     * Encrypt all specified fields
-     *
-     * @param PhalconModel $model Model to encrypt
-     *
-     * @return PhalconModel
-     */
-    public static function encrypt(PhalconModel $model): PhalconModel
-    {
-        $encryptFields = static::getEncryptFields();
-
-        if (count($encryptFields) === 0) {
-            return $model;
-        }
-
-        $modelToken = self::getModelToken();
-
-        foreach ($encryptFields as $field) {
-            if (!isset($model->{$field})) { continue; }
-
-            $model->{$field} = $this->getSecurity()->encrypt($modelToken, $model->{$field});
-        }
-
-
-        return $model;
-    }
-    
-    /**
-     * Decrypt all specified fields
-     *
-     * @param PhalconModel $model Model to decrypt
-     * 
-     * @return PhalconModel
-     */
-    public static function decrypt(PhalconModel $model): PhalconModel
-    {
-        $encryptFields = static::getEncryptFields();
-        
-        if (count($encryptFields) === 0) {
-            return $model;
-        }
-
-        $modelToken = self::getModelToken();
-
-        foreach ($encryptFields as $field) {
-            if (!isset($model->{$field})) { continue; }
-
-            $model->{$field} = $this->getSecurity()->decrypt($modelToken, $model->{$field});
-        }
-
-        return $model;
     }
     
     /**
@@ -118,7 +64,7 @@ abstract class Model extends PhalconModel implements ModelInterface
         while ($result->valid()) {
             $model = $result->current();
 
-            $resultSet->setRow(self::decrypt($model));
+            $resultSet->setRow(self::decryptFields($model));
 
             $result->next();
         }
@@ -147,7 +93,7 @@ abstract class Model extends PhalconModel implements ModelInterface
      */
     public function afterFetch()
     {
-        self::decrypt($this);
+        self::decryptFields($this);
     }
    
     /**
@@ -157,7 +103,7 @@ abstract class Model extends PhalconModel implements ModelInterface
      */
     public function beforeSave()
     {
-        self::encrypt($this);
+        self::encryptFields($this);
     }
 
     /**
@@ -192,13 +138,89 @@ abstract class Model extends PhalconModel implements ModelInterface
     }
 
     /**
+     * Encrypt field
+     *
+     * @param string $encrypt
+     * 
+     * @return string
+     */
+    protected static function encrypt(string $encrypt): string
+    {
+        $modelToken = self::getModelToken();
+
+        return self::getSecurity()->encrypt($modelToken, $encrypt);
+    }
+
+    /**
+     * Decrypt field
+     *
+     * @param string $decrypt
+     * 
+     * @return string
+     */
+    protected static function decrypt(string $decrypt): string
+    {
+        $modelToken = self::getModelToken();
+
+        return self::getSecurity()->decrypt($modelToken, $decrypt);
+    }
+    
+    /**
+     * Encrypt all specified fields
+     *
+     * @param PhalconModel $model Model to encrypt
+     *
+     * @return PhalconModel
+     */
+    protected static function encryptFields(PhalconModel $model): PhalconModel
+    {
+        $encryptFields = static::getEncryptFields();
+
+        if (count($encryptFields) === 0) {
+            return $model;
+        }
+
+        foreach ($encryptFields as $field) {
+            if (!isset($model->{$field})) { continue; }
+
+            $model->{$field} = self::encrypt($model->{$field});
+        }
+
+        return $model;
+    }
+    
+    /**
+     * Decrypt all specified fields
+     *
+     * @param PhalconModel $model Model to decrypt
+     * 
+     * @return PhalconModel
+     */
+    protected static function decryptFields(PhalconModel $model): PhalconModel
+    {
+        $encryptFields = static::getEncryptFields();
+        
+        if (count($encryptFields) === 0) {
+            return $model;
+        }
+
+        foreach ($encryptFields as $field) {
+            if (!isset($model->{$field})) { continue; }
+
+            $model->{$field} = self::decrypt($model->{$field});
+        }
+
+        return $model;
+    }
+
+    /**
      * Convert array to model parameters
      * 
      * @param array $parameters Parameters to convert
      * 
      * @return array|null
      */
-    public static function arrayToParameters(array $parameters): ?array {
+    private static function arrayToParameters(array $parameters): ?array {
         if (count($parameters) === 0) {
             return null;
         }
@@ -220,11 +242,7 @@ abstract class Model extends PhalconModel implements ModelInterface
      */
     private static function getSecurity(): Security
     {
-        if (!isset(self::$security)) {
-            self::$security = new Security();
-        }
-
-        return self::$security;
+        return Di::getDefault()->getShared('security');
     }
 
     /**
