@@ -262,7 +262,8 @@ abstract class Model extends PhalconModel implements ModelInterface
      * 
      * @return array
      */
-    private static function injectActiveParameter($parameters = null): array {
+    private static function injectActiveParameter($parameters = null): array
+    {
         if ($parameters === null) {
             $parameters = [];
         }
