@@ -18,6 +18,8 @@ use Phalcon\Session\Adapter\Stream;
 
 class SessionProvider extends AbstractProvider
 {
+    protected const SESSION_NAME = 'session_name';
+
     /**
      * Provider name
      *
@@ -34,9 +36,15 @@ class SessionProvider extends AbstractProvider
      */
     public function register(array $parameters = []): void
     {
-        $this->getDI()->setShared($this->providerName, function () {
+        $this->getDI()->setShared($this->providerName, function () use ($parameters) {
             $session = new Manager();
             $session->setAdapter(new Stream(['savePath' => '/tmp']));
+
+            $sessionNameKey = self::SESSION_NAME;
+            if (isset($parameters[$sessionNameKey])) {
+                $session->setName($parameters[$sessionNameKey]);
+            }
+
             $session->start();
 
             return $session;

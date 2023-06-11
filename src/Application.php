@@ -149,6 +149,7 @@ class Application
         $extraProviders = $configs['providers'] ?? [];
         $securityParams = $configs['security'] ?? [];
         $applicationParams = $configs['application'] ?? [];
+        $sessionParams = $configs['session'] ?? [];
         $flashParams = $configs['flash'] ?? [];
 
         // Init Generic Service Providers
@@ -164,7 +165,7 @@ class Application
         $this->initializeProvider(new ResponseProvider($this->di));
         $this->initializeProvider(new EscaperProvider($this->di));
         $this->initializeProvider(new CookiesProvider($this->di));
-        $this->initializeProvider(new SessionProvider($this->di));
+        $this->initializeProvider(new SessionProvider($this->di), $sessionParams);
         $this->initializeProvider(new SecurityProvider($this->di), $securityParams);
         $this->initializeProvider(new FlashProvider($this->di), $flashParams);
 
