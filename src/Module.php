@@ -34,7 +34,7 @@ abstract class Module implements ModuleInterface
     /**
      * @var ManagerInterface|null
      */
-    protected $eventsManager;
+    protected ?ManagerInterface $eventsManager;
 
     /**
      * Module constructor.

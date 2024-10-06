@@ -111,7 +111,7 @@ class Application
      *
      * @var ProviderInterface[]
      */
-    protected $providers = [];
+    protected array $providers = [];
 
     /**
      * Application constructor
