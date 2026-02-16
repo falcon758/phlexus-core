@@ -275,15 +275,24 @@ abstract class Model extends PhalconModel implements ModelInterface
         if (property_exists($m_class, $activeField)) {
             $inserted = false;
             if (isset($parameters[0]) && strpos($parameters[0], $activeField) === false) {
-                $parameters[0] .= " AND $m_class.$activeField = :injectedActive:";
+                $existing = trim((string) $parameters[0]);
+                if ($existing === '') {
+                    $parameters[0] = "$m_class.$activeField = :injectedActive:";
+                } else {
+                    $parameters[0] .= " AND $m_class.$activeField = :injectedActive:";
+                }
 
                 $inserted = true;
             } else if (
                 !isset($parameters[0]) &&
                 (!isset($parameters['conditions']) || strpos($parameters['conditions'], $activeField) === false)
             ) {
-                $conditions = isset($parameters['conditions']) ? $parameters['conditions'] . ' AND ' : '';
-                $parameters['conditions'] = $conditions . "$m_class.$activeField = :injectedActive:";
+                $existing = isset($parameters['conditions']) ? trim((string) $parameters['conditions']) : '';
+                if ($existing === '') {
+                    $parameters['conditions'] = "$m_class.$activeField = :injectedActive:";
+                } else {
+                    $parameters['conditions'] = $existing . ' AND ' . "$m_class.$activeField = :injectedActive:";
+                }
 
                 $inserted = true;
             }
