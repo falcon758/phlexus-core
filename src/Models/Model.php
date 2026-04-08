@@ -88,7 +88,7 @@ abstract class Model extends PhalconModel implements ModelInterface
 
     /**
      * After Fetch
-     * 
+     *
      * @return void
      */
     public function afterFetch()
@@ -98,12 +98,32 @@ abstract class Model extends PhalconModel implements ModelInterface
    
     /**
      * Before Save
-     * 
+     *
      * @return void
      */
     public function beforeSave()
     {
         self::encryptFields($this);
+    }
+
+    /**
+     * Before create
+     *
+     * @return void
+     */
+    public function beforeCreate()
+    {
+        $this->applyTimestampRulesOnCreate();
+    }
+
+    /**
+     * Before update
+     *
+     * @return void
+     */
+    public function beforeUpdate()
+    {
+        $this->applyTimestampRulesOnUpdate();
     }
 
     /**
@@ -211,6 +231,40 @@ abstract class Model extends PhalconModel implements ModelInterface
         }
 
         return $model;
+    }
+
+    /**
+     * Apply timestamp defaults before insert
+     * 
+     * @return void
+     */
+    protected function applyTimestampRulesOnCreate(): void
+    {
+        $now = date('Y-m-d H:i:s');
+
+        if (property_exists($this, 'createdAt') && empty($this->createdAt)) {
+            $this->createdAt = $now;
+        }
+
+        if (property_exists($this, 'modifiedAt') && empty($this->modifiedAt)) {
+            $this->modifiedAt = $now;
+        }
+    }
+
+    /**
+     * Apply timestamp defaults before update
+     * 
+     * @return void
+     */
+    protected function applyTimestampRulesOnUpdate(): void
+    {
+        if (property_exists($this, 'createdAt')) {
+            $this->skipAttributesOnUpdate(['createdAt']);
+        }
+
+        if (property_exists($this, 'modifiedAt')) {
+            $this->modifiedAt = date('Y-m-d H:i:s');
+        }
     }
 
     /**
