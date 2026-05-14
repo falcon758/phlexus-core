@@ -228,11 +228,16 @@ class Security extends PhalconSecurity
      * @param string $token Token to encrypt
      * @param string $data  Data to encrypt
      *
-     * @return string|null
+     * @return string
+     * @throws \RuntimeException
      */
-    public function encrypt(string $token, string $data): ?string
+    public function encrypt(string $token, string $data): string
     {
-        return \openssl_encrypt($data, Security::ENCRYPT_ALGO, $token, 0, $this->getAppHash()) ?: null;
+        $result = \openssl_encrypt($data, Security::ENCRYPT_ALGO, $token, 0, $this->getAppHash());
+        if ($result === false) {
+            throw new \RuntimeException('Encryption failed: ' . (\openssl_error_string() ?: 'unknown error'));
+        }
+        return $result;
     }
 
     /**
@@ -241,10 +246,15 @@ class Security extends PhalconSecurity
      * @param string $token Token to decrypt
      * @param string $data  Data to decrypt
      *
-     * @return string|null
+     * @return string
+     * @throws \RuntimeException
      */
-    public function decrypt(string $token, string $data): ?string
+    public function decrypt(string $token, string $data): string
     {
-        return \openssl_decrypt($data, Security::ENCRYPT_ALGO, $token, 0, $this->getAppHash()) ?: null;
+        $result = \openssl_decrypt($data, Security::ENCRYPT_ALGO, $token, 0, $this->getAppHash());
+        if ($result === false) {
+            throw new \RuntimeException('Decryption failed: ' . (\openssl_error_string() ?: 'unknown error'));
+        }
+        return $result;
     }
 }
