@@ -80,6 +80,19 @@ class Security extends PhalconSecurity
     }
 
     /**
+     * Returns a stable CSRF token — reuses the existing session token if one
+     * already exists instead of regenerating on every request.
+     */
+    public function getToken(): ?string
+    {
+        $existing = $this->getSessionToken();
+        if ($existing !== null) {
+            return $existing;
+        }
+        return parent::getToken();
+    }
+
+    /**
      * Get DatabaseHash
      *
      * @return string
