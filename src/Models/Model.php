@@ -61,10 +61,9 @@ abstract class Model extends PhalconModel implements ModelInterface
 
         $result->rewind();
 
+        // Hydration already decrypted the record through afterFetch()
         while ($result->valid()) {
-            $model = $result->current();
-
-            $resultSet->setRow(self::decryptFields($model));
+            $resultSet->setRow($result->current());
 
             $result->next();
         }
